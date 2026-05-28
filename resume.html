@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dipika Mendon | Product Manager</title>
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body{
+      background:#0b1020;
+      color:#ffffff;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:'';
+      position:fixed;
+      width:600px;
+      height:600px;
+      background:linear-gradient(45deg,#6c63ff,#00d4ff);
+      border-radius:50%;
+      filter:blur(120px);
+      top:-200px;
+      right:-150px;
+      opacity:0.25;
+      z-index:-1;
+    }
+
+    body::after{
+      content:'';
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:linear-gradient(45deg,#ff4ecd,#7b61ff);
+      border-radius:50%;
+      filter:blur(140px);
+      bottom:-180px;
+      left:-120px;
+      opacity:0.2;
+      z-index:-1;
+    }
+
+    .container{
+      width:90%;
+      max-width:1300px;
+      margin:auto;
+      padding:40px 0;
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:40px;
+      margin-bottom:50px;
+      flex-wrap:wrap;
+    }
+
+    .hero-left{
+      flex:1;
+    }
+
+    .hero-left h1{
+      font-size:64px;
+      line-height:1.1;
+      margin-bottom:15px;
+    }
+
+    .gradient{
+      background:linear-gradient(to right,#00d4ff,#7b61ff,#ff4ecd);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+
+    .hero-left h2{
+      color:#9ea7c5;
+      margin-bottom:20px;
+      font-weight:400;
+    }
+
+    .hero-left p{
+      font-size:18px;
+      line-height:1.7;
+      color:#c7d0ef;
+      max-width:700px;
+    }
+
+    .hero-right{
+      width:300px;
+      height:300px;
+      border-radius:30px;
+      background:rgba(255,255,255,0.06);
+      border:1px solid rgba(255,255,255,0.1);
+      backdrop-filter:blur(20px);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero-right::before{
+      content:'PM';
+      font-size:120px;
+      font-weight:bold;
+      color:rgba(255,255,255,0.08);
+      position:absolute;
+    }
+
+    .hero-card{
+      text-align:center;
+      z-index:2;
+    }
+
+    .hero-card h3{
+      font-size:28px;
+      margin-bottom:10px;
+    }
+
+    .hero-card p{
+      color:#cfd5ec;
+    }
+
+    .section-title{
+      font-size:32px;
+      margin-bottom:30px;
+      position:relative;
+      display:inline-block;
+    }
+
+    .section-title::after{
+      content:'';
+      position:absolute;
+      left:0;
+      bottom:-10px;
+      width:70%;
+      height:4px;
+      background:linear-gradient(to right,#00d4ff,#ff4ecd);
+      border-radius:20px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:25px;
+      margin-bottom:60px;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.08);
+      padding:25px;
+      border-radius:24px;
+      backdrop-filter:blur(16px);
+      transition:0.4s;
+    }
+
+    .card:hover{
+      transform:translateY(-8px);
+      border-color:#7b61ff;
+      box-shadow:0 0 25px rgba(123,97,255,0.3);
+    }
+
+    .card h3{
+      margin-bottom:15px;
+      font-size:24px;
+      color:#ffffff;
+    }
+
+    .card p{
+      color:#cfd5ec;
+      line-height:1.7;
+    }
+
+    .skills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:15px;
+      margin-top:20px;
+    }
+
+    .skill{
+      padding:10px 18px;
+      border-radius:30px;
+      background:rgba(255,255,255,0.08);
+      border:1px solid rgba(255,255,255,0.08);
+      color:#ffffff;
+      transition:0.3s;
+    }
+
+    .skill:hover{
+      background:#7b61ff;
+      cursor:pointer;
+    }
+
+    .timeline{
+      position:relative;
+      margin-top:30px;
+    }
+
+    .timeline::before{
+      content:'';
+      position:absolute;
+      left:10px;
+      top:0;
+      width:3px;
+      height:100%;
+      background:linear-gradient(#00d4ff,#ff4ecd);
+    }
+
+    .timeline-item{
+      margin-left:40px;
+      margin-bottom:35px;
+      position:relative;
+    }
+
+    .timeline-item::before{
+      content:'';
+      position:absolute;
+      left:-37px;
+      top:5px;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#00d4ff;
+      box-shadow:0 0 15px #00d4ff;
+    }
+
+    .timeline-item h4{
+      font-size:22px;
+      margin-bottom:8px;
+    }
+
+    .timeline-item span{
+      color:#9ea7c5;
+      font-size:14px;
+    }
+
+    .timeline-item p{
+      margin-top:10px;
+      line-height:1.7;
+      color:#d7def8;
+    }
+
+    footer{
+      text-align:center;
+      margin-top:80px;
+      color:#9ea7c5;
+      padding-bottom:40px;
+    }
+
+    .btn{
+      display:inline-block;
+      margin-top:30px;
+      padding:14px 28px;
+      border-radius:40px;
+      background:linear-gradient(to right,#00d4ff,#7b61ff);
+      color:white;
+      text-decoration:none;
+      font-weight:600;
+      transition:0.3s;
+    }
+
+    .btn:hover{
+      transform:scale(1.05);
+    }
+
+    @media(max-width:768px){
+
+      .hero-left h1{
+        font-size:42px;
+      }
+
+      .hero{
+        flex-direction:column;
+      }
+
+      .hero-right{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <section class="hero">
+
+      <div class="hero-left">
+        <h1>
+          Hi, I'm <span class="gradient">Dipika Mendon</span>
+        </h1>
+
+        <h2>
+          Associate Product Manager | KYC & FinTech Product Specialist
+        </h2>
+
+        <p>
+          Product Manager with 3+ years of experience building and improving digital onboarding,
+          KYC, Demat, Trading and Mutual Fund journeys. Passionate about solving user problems,
+          improving operational efficiency, and bridging the gap between business and technology.
+          Experienced in requirement gathering, stakeholder management, UAT, product documentation,
+          and fintech process optimization.
+        </p>
+
+        <a href="#" class="btn">Download Resume</a>
+      </div>
+
+      <div class="hero-right">
+        <div class="hero-card">
+          <h3>3+ Years</h3>
+          <p>Product Management Experience</p>
+        </div>
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2 class="section-title">About Me</h2>
+
+      <div class="grid">
+
+        <div class="card">
+          <h3>Current Role</h3>
+          <p>
+            Associate Product Manager at Motilal Oswal, managing KYC onboarding
+            journeys for Trading, Demat & Mutual Fund clients.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Core Strength</h3>
+          <p>
+            Strong understanding of fintech onboarding flows, operations,
+            compliance requirements, product lifecycle and stakeholder communication.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Career Journey</h3>
+          <p>
+            Started in operations, transitioned to Business Analyst role,
+            and then moved into Product Management with deep domain expertise in KYC.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2 class="section-title">Skills</h2>
+
+      <div class="skills">
+
+        <div class="skill">Product Management</div>
+        <div class="skill">KYC</div>
+        <div class="skill">FinTech</div>
+        <div class="skill">Requirement Gathering</div>
+        <div class="skill">JIRA</div>
+        <div class="skill">Zoho</div>
+        <div class="skill">Stakeholder Management</div>
+        <div class="skill">UAT Testing</div>
+        <div class="skill">Business Analysis</div>
+        <div class="skill">PRD & BRS</div>
+        <div class="skill">Agile</div>
+        <div class="skill">Scrum</div>
+        <div class="skill">AI & RAG Basics</div>
+        <div class="skill">Workflow Optimization</div>
+
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2 class="section-title">Experience</h2>
+
+      <div class="timeline">
+
+        <div class="timeline-item">
+          <h4>Associate Product Manager</h4>
+          <span>Motilal Oswal | 2022 - Present</span>
+
+          <p>
+            Managing digital onboarding and KYC journeys for Demat,
+            Trading and Mutual Fund clients. Working closely with business,
+            tech, QA and operations teams to improve onboarding experience,
+            reduce drop-offs and optimize compliance workflows.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <h4>Business Analyst</h4>
+          <span>2021 - 2022</span>
+
+          <p>
+            Gathered requirements, created BRS/PRDs, coordinated with development teams,
+            and supported UAT and production deployments.
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <h4>Operations</h4>
+          <span>2017 - 2021</span>
+
+          <p>
+            Built strong domain understanding of customer onboarding,
+            operations handling and financial workflows which later helped
+            transition into Product Management.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2 class="section-title">Projects</h2>
+
+      <div class="grid">
+
+        <div class="card">
+          <h3>Digital KYC Journey Optimization</h3>
+
+          <p>
+            Improved onboarding workflows involving Aadhaar OCR,
+            signature validation, nominee flow, penny drop verification,
+            PDF automation and image processing enhancements.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>FinTech Process Automation</h3>
+
+          <p>
+            Worked on bank modification flows, DP ID logic,
+            compliance validations and onboarding process enhancements
+            for better operational efficiency.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>AI & Product Learning</h3>
+
+          <p>
+            Exploring AI concepts including RAG, vector embeddings,
+            and AI-powered workflows to build future-ready product skills.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section>
+
+      <h2 class="section-title">Education & Certifications</h2>
+
+      <div class="grid">
+
+        <div class="card">
+          <h3>Education</h3>
+
+          <p>
+            Patkar Varde College
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Professional Learning</h3>
+
+          <p>
+            Product Management Program <br><br>
+            Preparing for PSPO I (Professional Scrum Product Owner)
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <footer>
+
+      <h2 class="gradient">Let's Build Impactful Products 🚀</h2>
+
+      <p style="margin-top:20px;">
+        Product Manager | FinTech Enthusiast | Future AI Product Leader
+      </p>
+
+    </footer>
+
+  </div>
+
+
+  <script>
+
+    const skills = document.querySelectorAll('.skill');
+
+    skills.forEach(skill => {
+
+      skill.addEventListener('mouseover', () => {
+
+        skill.style.transform = 'scale(1.08)';
+
+      });
+
+      skill.addEventListener('mouseout', () => {
+
+        skill.style.transform = 'scale(1)';
+
+      });
+
+    });
+
+    window.addEventListener('scroll', () => {
+
+      const cards = document.querySelectorAll('.card');
+
+      cards.forEach(card => {
+
+        const top = card.getBoundingClientRect().top;
+
+        if(top < window.innerHeight - 100){
+
+          card.style.opacity = 1;
+          card.style.transform = 'translateY(0px)';
+        }
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
