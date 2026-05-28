@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>RAG Simulator</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#050816;
+    color:white;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#6c63ff;
+    border-radius:50%;
+    filter:blur(180px);
+    top:-200px;
+    left:-150px;
+    opacity:0.25;
+    z-index:-1;
+}
+
+body::after{
+    content:'';
+    position:fixed;
+    width:500px;
+    height:500px;
+    background:#00d4ff;
+    border-radius:50%;
+    filter:blur(180px);
+    bottom:-250px;
+    right:-200px;
+    opacity:0.2;
+    z-index:-1;
+}
+
+.container{
+    width:90%;
+    max-width:1400px;
+    margin:auto;
+    padding:40px 0;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.hero h1{
+    font-size:60px;
+    margin-bottom:20px;
+    background:linear-gradient(to right,#00d4ff,#7b61ff,#ff4ecd);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+    color:#cbd5e1;
+    font-size:20px;
+    max-width:900px;
+    margin:auto;
+    line-height:1.8;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.card{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:25px;
+    transition:0.4s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#7b61ff;
+    box-shadow:0 0 25px rgba(123,97,255,0.4);
+}
+
+.card h2{
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+textarea{
+    width:100%;
+    height:220px;
+    background:#0f172a;
+    border:none;
+    border-radius:15px;
+    padding:20px;
+    color:white;
+    font-size:16px;
+    resize:none;
+    outline:none;
+    line-height:1.6;
+}
+
+button{
+    margin-top:20px;
+    padding:14px 24px;
+    border:none;
+    border-radius:14px;
+    background:linear-gradient(to right,#00d4ff,#7b61ff);
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:bold;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.output-box{
+    margin-top:20px;
+    background:#0f172a;
+    border-radius:15px;
+    padding:20px;
+    min-height:150px;
+    line-height:1.7;
+    color:#dbeafe;
+}
+
+.chunk{
+    background:#1e293b;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    border-left:4px solid #00d4ff;
+}
+
+.embedding{
+    background:#111827;
+    padding:10px;
+    margin-top:10px;
+    border-radius:10px;
+    color:#93c5fd;
+    font-size:14px;
+}
+
+.search-box{
+    margin-top:20px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#0f172a;
+    color:white;
+    outline:none;
+    margin-top:10px;
+    font-size:16px;
+}
+
+.steps{
+    margin-top:50px;
+}
+
+.steps h2{
+    margin-bottom:30px;
+    font-size:36px;
+}
+
+.step-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+.step{
+    background:rgba(255,255,255,0.05);
+    padding:25px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.08);
+    transition:0.3s;
+}
+
+.step:hover{
+    transform:translateY(-5px);
+}
+
+.step-number{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:linear-gradient(to right,#00d4ff,#7b61ff);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.highlight{
+    color:#00d4ff;
+    font-weight:bold;
+}
+
+footer{
+    margin-top:60px;
+    text-align:center;
+    color:#94a3b8;
+}
+
+@media(max-width:900px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:42px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <section class="hero">
+
+        <h1>RAG Simulator</h1>
+
+        <p>
+            Learn how Retrieval Augmented Generation (RAG) works step by step.
+            This simulator demonstrates document chunking, vector embeddings,
+            vector database storage, semantic search and AI response generation.
+        </p>
+
+    </section>
+
+    <section class="main-grid">
+
+        <div class="card">
+
+            <h2>📄 Enter Knowledge Base</h2>
+
+            <textarea id="documentInput">
+RAG stands for Retrieval Augmented Generation. 
+
+RAG works by retrieving only relevant information instead of sending the whole database to the AI model.
+
+The document is broken into smaller chunks like paragraphs or sentences.
+
+Each chunk is converted into vector embeddings using embedding models.
+
+The embeddings are stored inside a vector database or knowledge base.
+
+When the user asks a question, the query is also converted into embeddings.
+
+Similarity search finds the most relevant chunks.
+
+The relevant chunks are sent to the LLM to generate a final response.
+            </textarea>
+
+            <button onclick="processRAG()">
+                Process RAG Pipeline
+            </button>
+
+            <div class="output-box" id="chunkOutput">
+
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>🔍 Ask Question</h2>
+
+            <div class="search-box">
+
+                <input 
+                    type="text" 
+                    id="questionInput"
+                    placeholder="Example: How does RAG search information?"
+                />
+
+                <button onclick="searchKnowledge()">
+                    Search Knowledge Base
+                </button>
+
+            </div>
+
+            <div class="output-box" id="searchResult">
+
+                Ask a question to simulate semantic retrieval.
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="steps">
+
+        <h2>⚡ RAG Architecture Flow</h2>
+
+        <div class="step-grid">
+
+            <div class="step">
+                <div class="step-number">1</div>
+
+                <h3>Document Input</h3>
+
+                <p>
+                    Large documents are uploaded into the system.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+
+                <h3>Chunking</h3>
+
+                <p>
+                    Documents are split into smaller <span class="highlight">chunks</span>
+                    like paragraphs or sentences.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+
+                <h3>Embeddings</h3>
+
+                <p>
+                    Each chunk becomes a <span class="highlight">vector embedding</span>.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+
+                <h3>Vector Database</h3>
+
+                <p>
+                    Embeddings are stored inside a vector DB like Pinecone or Weaviate.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">5</div>
+
+                <h3>User Query</h3>
+
+                <p>
+                    User question is converted into embeddings.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">6</div>
+
+                <h3>Similarity Search</h3>
+
+                <p>
+                    Semantic search retrieves the most relevant chunks.
+                </p>
+            </div>
+
+            <div class="step">
+                <div class="step-number">7</div>
+
+                <h3>LLM Response</h3>
+
+                <p>
+                    Retrieved chunks are passed to the LLM for final answer generation.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+
+        <p>
+            Built to understand Retrieval Augmented Generation 🚀
+        </p>
+
+    </footer>
+
+</div>
+
+<script>
+
+let vectorDatabase = [];
+
+function generateFakeEmbedding(text){
+
+    let vector = [];
+
+    for(let i=0; i<10; i++){
+
+        vector.push(
+            Math.floor(Math.random() * 100)
+        );
+
+    }
+
+    return vector;
+
+}
+
+function processRAG(){
+
+    const text = document.getElementById('documentInput').value;
+
+    const chunks = text
+        .split('.')
+        .filter(chunk => chunk.trim() !== '');
+
+    const output = document.getElementById('chunkOutput');
+
+    output.innerHTML = '';
+
+    vectorDatabase = [];
+
+    chunks.forEach((chunk,index)=>{
+
+        const embedding = generateFakeEmbedding(chunk);
+
+        vectorDatabase.push({
+            text:chunk,
+            embedding:embedding
+        });
+
+        output.innerHTML += `
+
+            <div class="chunk">
+
+                <strong>Chunk ${index+1}</strong>
+
+                <p>${chunk}</p>
+
+                <div class="embedding">
+
+                    Vector Embedding:
+                    [${embedding.join(', ')}]
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+function searchKnowledge(){
+
+    const question = document
+        .getElementById('questionInput')
+        .value
+        .toLowerCase();
+
+    const result = document
+        .getElementById('searchResult');
+
+    if(vectorDatabase.length === 0){
+
+        result.innerHTML = `
+            Please process the RAG pipeline first.
+        `;
+
+        return;
+
+    }
+
+    let matchedChunks = [];
+
+    vectorDatabase.forEach(item=>{
+
+        if(
+            item.text.toLowerCase().includes('rag') &&
+            question.includes('rag')
+        ){
+
+            matchedChunks.push(item.text);
+
+        }
+
+        if(
+            item.text.toLowerCase().includes('embedding') &&
+            question.includes('embedding')
+        ){
+
+            matchedChunks.push(item.text);
+
+        }
+
+        if(
+            item.text.toLowerCase().includes('search') &&
+            question.includes('search')
+        ){
+
+            matchedChunks.push(item.text);
+
+        }
+
+        if(
+            item.text.toLowerCase().includes('chunk') &&
+            question.includes('chunk')
+        ){
+
+            matchedChunks.push(item.text);
+
+        }
+
+    });
+
+    if(matchedChunks.length === 0){
+
+        matchedChunks.push(
+            vectorDatabase[
+                Math.floor(
+                    Math.random() * vectorDatabase.length
+                )
+            ].text
+        );
+
+    }
+
+    result.innerHTML = `
+
+        <h3 style="margin-bottom:15px;color:#00d4ff;">
+            Retrieved Chunks
+        </h3>
+
+        ${matchedChunks.map(chunk => `
+
+            <div class="chunk">
+
+                ${chunk}
+
+            </div>
+
+        `).join('')}
+
+        <br>
+
+        <h3 style="color:#7b61ff;">
+            Final AI Response
+        </h3>
+
+        <p style="margin-top:10px;line-height:1.8;">
+
+            Based on the retrieved chunks, the LLM generates a contextual response
+            instead of using the entire document.
+
+        </p>
+
+    `;
+
+}
+
+processRAG();
+
+</script>
+
+</body>
+</html>
